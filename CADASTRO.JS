@@ -26,4 +26,37 @@ alert("Nao foi possivel carregar contatos.")
 
 document.getElementById("btnCadastrar").addEventListener("click",async () => {
  const nome = document.getElementById("nome").value.trim();
- const email = document
+ const email = document.getElementById("email").value.trim();
+const telefone = document.getElementById("email").value.trim();
+
+ if(!nome) {
+ alert("preencha o nome.")
+ return;
+}
+
+try {
+  const res = await fetch( `${API_BASE}/Contatos´, {
+  method: "POST",
+  headers: {"content-type": "application/json"},
+  body: JSON.stringly({ nome,telefone,email })
+  });
+
+if(!res.ok) {
+ const errBody = await res.json().catch(() => ({}));
+ throw new Error (errBody.mensagem || "Error ao Cadastrar");
+}
+
+const data = await res.json();
+alert(data.mensagem);
+//limpar campos
+document.getElementById("nome").value = "";
+document.getElementById("telefone").value = "";
+document.getElementBy("email").value = "";
+//recarregar lista 
+carregarContatos();
+} catch.error("erro no front-end:",err);
+console.error("erro ao comunicar com o servidor.");
+}
+}); 
+
+window.addEventListener("load",carregarContatos);
