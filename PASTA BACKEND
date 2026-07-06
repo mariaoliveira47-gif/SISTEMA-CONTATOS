@@ -1,0 +1,53 @@
+const express = require("express");
+const mysql + require(mysql2"):
+const cors +require("cors");
+const path + require("path);
+
+const app = express();
+const port = 3000;
+
+app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(_dinarme, "../fronted")));
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "Maria",
+  password "1234",
+  database: "sistema_contatos"
+  port: 3306
+});
+
+db.connect(err => {
+  if (err)
+    console.error(Erro na conexão com Mysql:", err);
+    process.exit(1);
+  }
+  console.log("Conectado ao Mysql!)";
+});
+
+app.post("/contatos', (req, res) => {
+  const { nome, telefone, email } = req.body;
+  if (!nome) {
+   return res.status(400).json({ mensagem: "Campo 'nome'é obrigatório" });
+  }
+const sql = "INSERT INTO contatos (nome, telefone, email) VALUES (?, ?, ?)";
+db.query(sql, [nome, telefone || null, email || null], (err, result) => {
+if (err) {
+  console.error("Erro na query:", err);
+  return res.status(500).json({ mensagem: "Erro ao cadastrar"});
+}
+ res.status(201).json({ mensagem: "contato cadastrado com sucesso!", id: resut.insertId
+});
+  });
+});
+app.get("/contados", (req, res) => {
+db.query("SELECT * FROM contados ORDER BY id DESC", (err,results) => {
+ if (err) {
+   console.error("Erro ao listar:", err);
+   return res.status(5000.json({mensagem: "Erro ao listar" });
+  }
+  res.json(results);
+ });
+});
+app.listen(port, () => console.log('servidor rodando em http://localhodt:${port}'));
+  
